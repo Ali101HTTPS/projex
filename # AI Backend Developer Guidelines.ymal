@@ -1,0 +1,102 @@
+# AI Backend Developer Guidelines
+> Rules and technical standards for the AI assistant helping build the backend system.
+
+## 🎯 Project Context
+
+This backend system is part of an internal desktop app for managing teams, tasks, and daily collaboration. It will include:
+
+- User authentication and role-based access
+- Task and goal management with weekly/monthly tracking
+- Daily team communication (chat)
+- Lightweight architecture and low server cost
+
+The AI assistant is expected to follow these engineering principles when generating backend code, suggestions, or improvements.
+
+---
+
+## ✅ Code Style and Standards
+
+- **Language**: Go (Golang)
+- **Framework**: Use `Gin` for HTTP server routing
+- **Database**: PostgreSQL (via `gorm`)
+- **Format**: Code should be properly indented, idiomatic, and follow Go best practices
+- **Naming**:
+  - Use `camelCase` for variables/functions
+  - Use `PascalCase` for struct and interface names
+- **Structure**:
+  - Follow a clean, layered project layout (`handlers`, `models`, `services`, `routes`, `config`)
+  - Avoid placing logic directly inside `main.go`
+
+---
+
+## 🧠 Design Principles
+
+- Keep endpoints **RESTful** and logically grouped
+- Handle **errors clearly** and always return proper status codes (e.g., 400, 404, 500)
+- Avoid over-engineering — prefer simple, readable code over cleverness
+- Always separate **business logic** from **handlers/controllers**
+- Use **interfaces** where abstraction helps testing or reuse
+
+---
+
+## 🛠️ Functionality Expectations
+
+The assistant should ensure these features are built correctly and cleanly:
+
+### 1. **Authentication & Authorization**
+- JWT-based auth
+- Basic RBAC: admin (manager) vs employee
+- User registration with email, username, and role
+
+### 2. **Task Management**
+- CRUD for tasks
+- Task types: single, collaborative
+- Assignments with start/end dates
+- Weekly/Monthly progress tracking
+
+### 3. **Daily Team Chat**
+- Use WebSocket for real-time chat
+- Messages grouped by day
+- Simple structure: sender, text, timestamp
+
+---
+
+## 📦 External Libraries Allowed
+
+- `gin-gonic/gin` (router)
+- `gorm.io/gorm` (ORM)
+- `gorilla/websocket` (chat)
+- `joho/godotenv` (env config)
+- `golang-jwt/jwt` (authentication)
+
+---
+
+## ⚠️ Must Avoid
+
+- No hardcoded values (use `.env` for config)
+- No large monolithic files — split into logical packages
+- No direct SQL queries unless performance-critical
+- Avoid premature optimization
+
+---
+
+## 🧪 Testing and Debugging
+
+- Write unit tests for services where logic is complex
+- Use `log.Println()` or `zap` for debugging (no panic unless critical)
+
+---
+
+## 🚀 Future-readiness
+
+- Code should be easy to extend with:
+  - Notifications
+  - File uploads
+  - Team-specific workspaces
+- AI should prepare the system for modular scaling (e.g., micro-modules)
+
+---
+
+## 📅 Last updated
+
+May 27, 2025 — maintained by: core backend team
