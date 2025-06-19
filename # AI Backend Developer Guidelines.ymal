@@ -47,13 +47,14 @@ The assistant should ensure these features are built correctly and cleanly:
 - JWT-based auth
 - Basic RBAC: admin (manager) vs employee
 - User registration with email, username, and role
+- No email 
 
 ### 2. **Task Management**
 - CRUD for tasks
 - Task types: single, collaborative
 - Assignments with start/end dates
 - Weekly/Monthly progress tracking
-
+- 
 ### 3. **Daily Team Chat**
 - Use WebSocket for real-time chat
 - Messages grouped by day

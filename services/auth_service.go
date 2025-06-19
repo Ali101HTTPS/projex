@@ -19,11 +19,6 @@ func NewAuthService(db *gorm.DB) *AuthService {
 	return &AuthService{DB: db}
 }
 
-func (s *AuthService) Register(username, email, password string, role models.Role) (*models.User, error) {
-	// TODO: Implement user registration
-	return nil, errors.New("not implemented")
-}
-
 func (s *AuthService) Login(username, password string) (string, error) {
 	// Check user credentials
 	var user models.User
@@ -36,19 +31,13 @@ func (s *AuthService) Login(username, password string) (string, error) {
 		return "", errors.New("invalid password")
 	}
 
-	// Generate JWT token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
-	})
-
-	// Sign and get the complete encoded token as a string
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	// Generate JWT token with proper claims
+	token, err := generateToken(&user)
 	if err != nil {
 		return "", err
 	}
 
-	return tokenString, nil
+	return token, nil
 }
 
 func generateToken(user *models.User) (string, error) {
@@ -57,9 +46,11 @@ func generateToken(user *models.User) (string, error) {
 		Role:   user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			NotBefore: jwt.NewNumericDate(time.Now()),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte("TODO: replace with secret from env"))
+	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"project-x/config"
+	"project-x/models"
 	"project-x/routes"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,12 @@ func main() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
+	// Auto migrate database tables
+	if err := db.AutoMigrate(&models.User{}, &models.Task{}, &models.CollaborativeTask{}, &models.CollaborativeTaskParticipant{}, &models.Project{}, &models.UserProject{}); err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+	log.Println("✅ Database tables migrated successfully")
+
 	// Initialize routes
 	setupRoutes(r, db)
 
@@ -30,6 +37,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	log.Printf("🚀 Server starting on port %s", port)
 	r.Run(":" + port)
 }
 
@@ -52,4 +60,8 @@ func setupDatabase() (*gorm.DB, error) {
 
 func setupRoutes(r *gin.Engine, db *gorm.DB) {
 	routes.SetupAuthRoutes(r, db)
+	routes.SetupUserRoutes(r, db)
+	routes.SetupTaskRoutes(r, db)
+	routes.SetupProjectRoutes(r, db)
+	routes.SetupCollaborativeTaskRoutes(r, db)
 }
